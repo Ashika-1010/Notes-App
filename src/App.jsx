@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import LeftPanel from './components/LeftPanel'
 import RightPanel from './components/RightPanel'
 
 const App = () => {
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
-  const [task, setTask] = useState([])
+  const [task, setTask] = useState(() => {
+  const savedNotes = localStorage.getItem("notes")
+  return savedNotes ? JSON.parse(savedNotes) : []
+})
+
+  useEffect(()=>{
+    localStorage.setItem("notes",JSON.stringify(task))
+  },[task])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -25,7 +32,6 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-zinc-950 text-zinc-100 font-sans">
 
-      {/* LEFT PANEL */}
       <LeftPanel 
       title={title}
       setTitle={setTitle}
